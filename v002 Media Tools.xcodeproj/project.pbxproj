@@ -1,0 +1,358 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1B3410AE15B38BB10035CA52 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410AD15B38BB10035CA52 /* Cocoa.framework */; };
+		1B3410B015B38BB10035CA52 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410AF15B38BB10035CA52 /* Quartz.framework */; };
+		1B3410BC15B38BB10035CA52 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1B3410BA15B38BB10035CA52 /* InfoPlist.strings */; };
+		1B3410BF15B38BB10035CA52 /* v002_Movie_PlayerPlugIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3410BE15B38BB10035CA52 /* v002_Movie_PlayerPlugIn.m */; };
+		1B3410CA15B38D4F0035CA52 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410C915B38D4F0035CA52 /* OpenGL.framework */; };
+		1B3410CC15B38D6E0035CA52 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410CB15B38D6E0035CA52 /* AVFoundation.framework */; };
+		1B3410CE15B38D750035CA52 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410CD15B38D750035CA52 /* CoreVideo.framework */; };
+		1B3410DE15B3AD9C0035CA52 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 1B3410D315B3AD9C0035CA52 /* icon.icns */; };
+		1B3410DF15B3AD9C0035CA52 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1B3410D415B3AD9C0035CA52 /* README.md */; };
+		1B3410E015B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3410D615B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.m */; };
+		1B3410E115B3AD9C0035CA52 /* v002FBO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3410D815B3AD9C0035CA52 /* v002FBO.m */; };
+		1B3410E215B3AD9C0035CA52 /* v002MasterPluginInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3410DA15B3AD9C0035CA52 /* v002MasterPluginInterface.m */; };
+		1B3410E315B3AD9C0035CA52 /* v002Shader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3410DC15B3AD9C0035CA52 /* v002Shader.m */; };
+		1B3410F215B3CDEB0035CA52 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410F115B3CDEB0035CA52 /* CoreMedia.framework */; };
+		1B3410F415B3CDF00035CA52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410F315B3CDF00035CA52 /* Accelerate.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1B3410AA15B38BB10035CA52 /* v002 Media Tools.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "v002 Media Tools.plugin"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B3410AD15B38BB10035CA52 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		1B3410AF15B38BB10035CA52 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		1B3410B215B38BB10035CA52 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		1B3410B315B38BB10035CA52 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		1B3410B415B38BB10035CA52 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1B3410B915B38BB10035CA52 /* v002 Media Tools-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "v002 Media Tools-Info.plist"; sourceTree = "<group>"; };
+		1B3410BB15B38BB10035CA52 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1B3410BD15B38BB10035CA52 /* v002_Movie_PlayerPlugIn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = v002_Movie_PlayerPlugIn.h; sourceTree = "<group>"; };
+		1B3410BE15B38BB10035CA52 /* v002_Movie_PlayerPlugIn.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = v002_Movie_PlayerPlugIn.m; sourceTree = "<group>"; };
+		1B3410C015B38BB10035CA52 /* v002 Media Tools-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "v002 Media Tools-Prefix.pch"; sourceTree = "<group>"; };
+		1B3410C915B38D4F0035CA52 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		1B3410CB15B38D6E0035CA52 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		1B3410CD15B38D750035CA52 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		1B3410D315B3AD9C0035CA52 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
+		1B3410D415B3AD9C0035CA52 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		1B3410D515B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002CVPixelBufferImageProvider.h; sourceTree = "<group>"; };
+		1B3410D615B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002CVPixelBufferImageProvider.m; sourceTree = "<group>"; };
+		1B3410D715B3AD9C0035CA52 /* v002FBO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002FBO.h; sourceTree = "<group>"; };
+		1B3410D815B3AD9C0035CA52 /* v002FBO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002FBO.m; sourceTree = "<group>"; };
+		1B3410D915B3AD9C0035CA52 /* v002MasterPluginInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002MasterPluginInterface.h; sourceTree = "<group>"; };
+		1B3410DA15B3AD9C0035CA52 /* v002MasterPluginInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002MasterPluginInterface.m; sourceTree = "<group>"; };
+		1B3410DB15B3AD9C0035CA52 /* v002Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002Shader.h; sourceTree = "<group>"; };
+		1B3410DC15B3AD9C0035CA52 /* v002Shader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002Shader.m; sourceTree = "<group>"; };
+		1B3410DD15B3AD9C0035CA52 /* v002UniqueClassNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002UniqueClassNames.h; sourceTree = "<group>"; };
+		1B3410F115B3CDEB0035CA52 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		1B3410F315B3CDF00035CA52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1B3410A615B38BB10035CA52 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B3410F415B3CDF00035CA52 /* Accelerate.framework in Frameworks */,
+				1B3410F215B3CDEB0035CA52 /* CoreMedia.framework in Frameworks */,
+				1B3410CE15B38D750035CA52 /* CoreVideo.framework in Frameworks */,
+				1B3410CC15B38D6E0035CA52 /* AVFoundation.framework in Frameworks */,
+				1B3410CA15B38D4F0035CA52 /* OpenGL.framework in Frameworks */,
+				1B3410AE15B38BB10035CA52 /* Cocoa.framework in Frameworks */,
+				1B3410B015B38BB10035CA52 /* Quartz.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1B34109E15B38BB10035CA52 = {
+			isa = PBXGroup;
+			children = (
+				1B3410B715B38BB10035CA52 /* v002 Media Tools */,
+				1B3410AC15B38BB10035CA52 /* Frameworks */,
+				1B3410AB15B38BB10035CA52 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1B3410AB15B38BB10035CA52 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1B3410AA15B38BB10035CA52 /* v002 Media Tools.plugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1B3410AC15B38BB10035CA52 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1B3410F315B3CDF00035CA52 /* Accelerate.framework */,
+				1B3410CB15B38D6E0035CA52 /* AVFoundation.framework */,
+				1B3410AD15B38BB10035CA52 /* Cocoa.framework */,
+				1B3410F115B3CDEB0035CA52 /* CoreMedia.framework */,
+				1B3410CD15B38D750035CA52 /* CoreVideo.framework */,
+				1B3410C915B38D4F0035CA52 /* OpenGL.framework */,
+				1B3410AF15B38BB10035CA52 /* Quartz.framework */,
+				1B3410B115B38BB10035CA52 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1B3410B115B38BB10035CA52 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1B3410B215B38BB10035CA52 /* AppKit.framework */,
+				1B3410B315B38BB10035CA52 /* CoreData.framework */,
+				1B3410B415B38BB10035CA52 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		1B3410B715B38BB10035CA52 /* v002 Media Tools */ = {
+			isa = PBXGroup;
+			children = (
+				1B3410D215B3AD9C0035CA52 /* v002 Utilities */,
+				1B3410BD15B38BB10035CA52 /* v002_Movie_PlayerPlugIn.h */,
+				1B3410BE15B38BB10035CA52 /* v002_Movie_PlayerPlugIn.m */,
+				1B3410B815B38BB10035CA52 /* Supporting Files */,
+			);
+			path = "v002 Media Tools";
+			sourceTree = "<group>";
+		};
+		1B3410B815B38BB10035CA52 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1B3410B915B38BB10035CA52 /* v002 Media Tools-Info.plist */,
+				1B3410BA15B38BB10035CA52 /* InfoPlist.strings */,
+				1B3410C015B38BB10035CA52 /* v002 Media Tools-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1B3410D215B3AD9C0035CA52 /* v002 Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				1B3410D315B3AD9C0035CA52 /* icon.icns */,
+				1B3410D415B3AD9C0035CA52 /* README.md */,
+				1B3410D515B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.h */,
+				1B3410D615B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.m */,
+				1B3410D715B3AD9C0035CA52 /* v002FBO.h */,
+				1B3410D815B3AD9C0035CA52 /* v002FBO.m */,
+				1B3410D915B3AD9C0035CA52 /* v002MasterPluginInterface.h */,
+				1B3410DA15B3AD9C0035CA52 /* v002MasterPluginInterface.m */,
+				1B3410DB15B3AD9C0035CA52 /* v002Shader.h */,
+				1B3410DC15B3AD9C0035CA52 /* v002Shader.m */,
+				1B3410DD15B3AD9C0035CA52 /* v002UniqueClassNames.h */,
+			);
+			path = "v002 Utilities";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1B3410A915B38BB10035CA52 /* v002 Media Tools */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1B3410C315B38BB20035CA52 /* Build configuration list for PBXNativeTarget "v002 Media Tools" */;
+			buildPhases = (
+				1B3410A515B38BB10035CA52 /* Sources */,
+				1B3410A615B38BB10035CA52 /* Frameworks */,
+				1B3410A715B38BB10035CA52 /* Resources */,
+				1B3410A815B38BB10035CA52 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "v002 Media Tools";
+			productName = "v002 Media Tools";
+			productReference = 1B3410AA15B38BB10035CA52 /* v002 Media Tools.plugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1B3410A015B38BB10035CA52 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = v002;
+			};
+			buildConfigurationList = 1B3410A315B38BB10035CA52 /* Build configuration list for PBXProject "v002 Media Tools" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 1B34109E15B38BB10035CA52;
+			productRefGroup = 1B3410AB15B38BB10035CA52 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1B3410A915B38BB10035CA52 /* v002 Media Tools */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1B3410A715B38BB10035CA52 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B3410BC15B38BB10035CA52 /* InfoPlist.strings in Resources */,
+				1B3410DE15B3AD9C0035CA52 /* icon.icns in Resources */,
+				1B3410DF15B3AD9C0035CA52 /* README.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1B3410A815B38BB10035CA52 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This shell script simply copies the built plug-in to \"~/Library/Graphics/Quartz Composer Plug-Ins\" and overrides any previous version at that location\n\nmkdir -p \"$USER_LIBRARY_DIR/Graphics/Quartz Composer Plug-Ins\"\nrm -rf \"$USER_LIBRARY_DIR/Graphics/Quartz Composer Plug-Ins/v002 Media Tools.plugin\"\ncp -rf \"$BUILT_PRODUCTS_DIR/v002 Media Tools.plugin\" \"$USER_LIBRARY_DIR/Graphics/Quartz Composer Plug-Ins/\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1B3410A515B38BB10035CA52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B3410BF15B38BB10035CA52 /* v002_Movie_PlayerPlugIn.m in Sources */,
+				1B3410E015B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.m in Sources */,
+				1B3410E115B3AD9C0035CA52 /* v002FBO.m in Sources */,
+				1B3410E215B3AD9C0035CA52 /* v002MasterPluginInterface.m in Sources */,
+				1B3410E315B3AD9C0035CA52 /* v002Shader.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1B3410BA15B38BB10035CA52 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1B3410BB15B38BB10035CA52 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1B3410C115B38BB20035CA52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		1B3410C215B38BB20035CA52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		1B3410C415B38BB20035CA52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_ENABLE_OBJC_GC = supported;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "v002 Media Tools/v002 Media Tools-Prefix.pch";
+				INFOPLIST_FILE = "v002 Media Tools/v002 Media Tools-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Graphics/Quartz Composer Plug-Ins";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Debug;
+		};
+		1B3410C515B38BB20035CA52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_ENABLE_OBJC_GC = supported;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "v002 Media Tools/v002 Media Tools-Prefix.pch";
+				INFOPLIST_FILE = "v002 Media Tools/v002 Media Tools-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Graphics/Quartz Composer Plug-Ins";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1B3410A315B38BB10035CA52 /* Build configuration list for PBXProject "v002 Media Tools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1B3410C115B38BB20035CA52 /* Debug */,
+				1B3410C215B38BB20035CA52 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1B3410C315B38BB20035CA52 /* Build configuration list for PBXNativeTarget "v002 Media Tools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1B3410C415B38BB20035CA52 /* Debug */,
+				1B3410C515B38BB20035CA52 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1B3410A015B38BB10035CA52 /* Project object */;
+}

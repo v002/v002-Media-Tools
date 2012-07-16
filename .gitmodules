@@ -1,0 +1,3 @@
+[submodule "v002 Utilities"]
+	path = v002 Utilities
+	url = https://github.com/v002/v002-Utilities.git
