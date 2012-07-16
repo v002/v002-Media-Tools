@@ -14,21 +14,9 @@
 #define	kQCPlugIn_Name				@"v002 Movie Player 3.0"
 #define	kQCPlugIn_Description		@"AVFoundation based movie player - supports only Pro Res and h.264"
 
-// private properties
-@interface v002_Movie_PlayerPlugIn ()
-{        
-    AVPlayer* player;
-    AVPlayerItemVideoOutput* playerItemVideoOutput;
-
-    dispatch_queue_t playerVideoOutputQueue;
-}
-@property (strong) v002CVPixelBufferImageProvider *output;
-@property BOOL movieDidEnd;
-
-@end
-
 @implementation v002_Movie_PlayerPlugIn
 
+@synthesize movieDidEnd;
 
 @dynamic inputPath;
 @dynamic inputPlayhead;
@@ -77,7 +65,7 @@
     if([key isEqualToString:@"inputVolume"])
         return  @{QCPortAttributeNameKey : @"Volume",
                 QCPortAttributeMinimumValueKey : [NSNumber numberWithFloat:0.0],
-                QCPortAttributeDefaultValueKey : [NSNumber numberWithFloat:0.0],
+                QCPortAttributeDefaultValueKey : [NSNumber numberWithFloat:1.0],
                 QCPortAttributeMaximumValueKey : [NSNumber numberWithFloat:1.0]};
 
     if([key isEqualToString:@"inputColorCorrection"])
@@ -158,10 +146,10 @@
     [player release];
     player = nil;
     
-    dispatch_sync(playerVideoOutputQueue, ^
-    {
-		[playerItemVideoOutput setDelegate:nil queue:NULL];
-	});
+//    dispatch_sync(playerVideoOutputQueue, ^
+//    {
+//		[playerItemVideoOutput setDelegate:nil queue:NULL];
+//	});
     
     [playerItemVideoOutput release];
     playerItemVideoOutput = nil;
@@ -223,10 +211,28 @@
         [player play];
     }
     
-    //seek
     if([self didValueForInputKeyChange:@"inputPlayhead"])
     {
      	[[player currentItem] seekToTime:CMTimeMultiplyByFloat64([[player currentItem] duration], (Float64) self.inputPlayhead) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    }
+
+    if([self didValueForInputKeyChange:@"inputPlay"])
+    {
+        if(self.inputPlay)
+            [player play];
+        else
+            [player pause];
+    }
+
+    
+    if([self didValueForInputKeyChange:@"inputRate"])
+    {
+        [player setRate:self.inputRate];
+    }
+
+    if([self didValueForInputKeyChange:@"inputVolume"])
+    {
+        [player setVolume:self.inputVolume];
     }
     
     // check our video output for new frames
@@ -236,12 +242,13 @@
 		CVPixelBufferRef pixBuff = [playerItemVideoOutput copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:NULL];
 		
         // create new output image provider - retains the pixel buffer for us
-        self.output = [[[v002CVPixelBufferImageProvider alloc] initWithPixelBuffer:pixBuff isFlipped:CVImageBufferIsFlipped(pixBuff) shouldColorMatch:self.inputColorCorrection] autorelease];
-		
+        v002CVPixelBufferImageProvider *output = [[v002CVPixelBufferImageProvider alloc] initWithPixelBuffer:pixBuff isFlipped:CVImageBufferIsFlipped(pixBuff) shouldColorMatch:self.inputColorCorrection];
+		        
+        self.outputImage = output;
+        
+        [output release];
         CVBufferRelease(pixBuff);
-        
-        self.outputImage = self.output;
-        
+
         double currentTime = CMTimeGetSeconds([[player currentItem] currentTime]);
         double duration = CMTimeGetSeconds([[player currentItem] duration]);
 
@@ -279,7 +286,6 @@
         self.movieDidEnd = YES;
 	}
 }
-
 
 - (void)outputMediaDataWillChange:(AVPlayerItemOutput *)sender NS_AVAILABLE(10_8, TBD)
 {

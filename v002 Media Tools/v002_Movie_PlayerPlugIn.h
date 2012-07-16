@@ -11,6 +11,16 @@
 #import <AVFoundation/AVFoundation.h>
 
 @interface v002_Movie_PlayerPlugIn : QCPlugIn <AVPlayerItemOutputPullDelegate>
+{
+    AVPlayer* player;
+    AVPlayerItemVideoOutput* playerItemVideoOutput;
+    
+    dispatch_queue_t playerVideoOutputQueue;
+    
+    BOOL movieDidEnd;
+}
+
+@property BOOL movieDidEnd;
 
 // output ports
 @property (strong) NSString* inputPath;
