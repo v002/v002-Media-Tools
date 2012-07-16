@@ -22,6 +22,8 @@
 		1B3410E315B3AD9C0035CA52 /* v002Shader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3410DC15B3AD9C0035CA52 /* v002Shader.m */; };
 		1B3410F215B3CDEB0035CA52 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410F115B3CDEB0035CA52 /* CoreMedia.framework */; };
 		1B3410F415B3CDF00035CA52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410F315B3CDF00035CA52 /* Accelerate.framework */; };
+		1B51A9FA15B496FB0078C076 /* v002_Screen_CapturePlugIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B51A9F915B496FB0078C076 /* v002_Screen_CapturePlugIn.m */; };
+		1B51A9FD15B4A9B50078C076 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B51A9FC15B4A9B50078C076 /* IOSurface.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,9 @@
 		1B3410DD15B3AD9C0035CA52 /* v002UniqueClassNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002UniqueClassNames.h; sourceTree = "<group>"; };
 		1B3410F115B3CDEB0035CA52 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		1B3410F315B3CDF00035CA52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		1B51A9F815B496FB0078C076 /* v002_Screen_CapturePlugIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002_Screen_CapturePlugIn.h; sourceTree = "<group>"; };
+		1B51A9F915B496FB0078C076 /* v002_Screen_CapturePlugIn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002_Screen_CapturePlugIn.m; sourceTree = "<group>"; };
+		1B51A9FC15B4A9B50078C076 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B51A9FD15B4A9B50078C076 /* IOSurface.framework in Frameworks */,
 				1B3410F415B3CDF00035CA52 /* Accelerate.framework in Frameworks */,
 				1B3410F215B3CDEB0035CA52 /* CoreMedia.framework in Frameworks */,
 				1B3410CE15B38D750035CA52 /* CoreVideo.framework in Frameworks */,
@@ -75,6 +81,7 @@
 		1B34109E15B38BB10035CA52 = {
 			isa = PBXGroup;
 			children = (
+				1B51A9FC15B4A9B50078C076 /* IOSurface.framework */,
 				1B3410B715B38BB10035CA52 /* v002 Media Tools */,
 				1B3410AC15B38BB10035CA52 /* Frameworks */,
 				1B3410AB15B38BB10035CA52 /* Products */,
@@ -120,6 +127,8 @@
 				1B3410D215B3AD9C0035CA52 /* v002 Utilities */,
 				1B3410BD15B38BB10035CA52 /* v002_Movie_PlayerPlugIn.h */,
 				1B3410BE15B38BB10035CA52 /* v002_Movie_PlayerPlugIn.m */,
+				1B51A9F815B496FB0078C076 /* v002_Screen_CapturePlugIn.h */,
+				1B51A9F915B496FB0078C076 /* v002_Screen_CapturePlugIn.m */,
 				1B3410B815B38BB10035CA52 /* Supporting Files */,
 			);
 			path = "v002 Media Tools";
@@ -239,6 +248,7 @@
 				1B3410E115B3AD9C0035CA52 /* v002FBO.m in Sources */,
 				1B3410E215B3AD9C0035CA52 /* v002MasterPluginInterface.m in Sources */,
 				1B3410E315B3AD9C0035CA52 /* v002Shader.m in Sources */,
+				1B51A9FA15B496FB0078C076 /* v002_Screen_CapturePlugIn.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

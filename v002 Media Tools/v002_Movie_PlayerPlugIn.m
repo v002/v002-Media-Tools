@@ -125,7 +125,8 @@
         player = [[AVPlayer alloc] init];
 
         // kCVPixelFormatType_32ARGB, kCVPixelFormatType_32BGRA, kCVPixelFormatType_422YpCbCr8
-        playerItemVideoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:kCVPixelFormatType_422YpCbCr8], kCVPixelBufferPixelFormatTypeKey, nil]]; 		if (playerItemVideoOutput)
+        playerItemVideoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:kCVPixelFormatType_422YpCbCr8], kCVPixelBufferPixelFormatTypeKey, nil]];
+ 		if (playerItemVideoOutput)
 		{
             playerItemVideoOutput.suppressesPlayerRendering = YES;
 //			[playerItemVideoOutput setDelegate:self queue:dispatch_get_main_queue()];

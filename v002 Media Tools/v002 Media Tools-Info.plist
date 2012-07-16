@@ -23,6 +23,7 @@
 	<key>QCPlugInClasses</key>
 	<array>
 		<string>v002_Movie_PlayerPlugIn</string>
+		<string>v002_Screen_CapturePlugIn</string>
 	</array>
 </dict>
 </plist>
