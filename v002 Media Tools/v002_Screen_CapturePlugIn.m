@@ -22,10 +22,11 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
     CFRelease(frameSurface);
 }
 
-
+@interface v002_Screen_CapturePlugIn (Private)
+- (IOSurfaceRef)copyNewFrame;
+- (void)emitNewFrame:(IOSurfaceRef)frame;
+@end
 @implementation v002_Screen_CapturePlugIn
-
-@synthesize displayImageProvider;
 
 // ports
 @dynamic inputDisplayID;
@@ -121,6 +122,27 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
     [super dealloc];
 }
 
+- (IOSurfaceRef)getAndSetFrame:(IOSurfaceRef)new
+{
+    bool success = false;
+    IOSurfaceRef old;
+    do {
+        old = updatedSurface;
+        success = OSAtomicCompareAndSwapPtrBarrier(old, new, (void * volatile *)&updatedSurface);
+    } while (!success);
+    return old;
+}
+
+- (IOSurfaceRef)copyNewFrame
+{
+    return [self getAndSetFrame:NULL];
+}
+
+- (void)emitNewFrame:(IOSurfaceRef)frame
+{
+    CFRetain(frame);
+    [self getAndSetFrame:frame];
+}
 
 @end
 
@@ -141,10 +163,7 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
 - (BOOL)execute:(id <QCPlugInContext>)context atTime:(NSTimeInterval)time withArguments:(NSDictionary *)arguments
 {
     CGLContextObj cgl_ctx = [context CGLContextObj];
-    
-    // Get the current queue we are on.
-    dispatch_queue_t pluginQueue = dispatch_get_current_queue();
-    
+        
     if([self didValueForInputKeyChange:@"inputDisplayID"])
     {
         NSLog(@"new Display ID");
@@ -170,49 +189,12 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
                                                                displayQueue,
                                                                ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef)
                                                                {
-                                                                   if(frameSurface)
+                                                                   if(status == kCGDisplayStreamFrameStatusFrameComplete && frameSurface)
                                                                    {
                                                                        // As per CGDisplayStreams header
-                                                                       CFRetain(frameSurface);
                                                                        IOSurfaceIncrementUseCount(frameSurface);
-                                                                       
-                                                                       // use the plugins Queue so our GL context is in the correct spot
-                                                                       dispatch_sync(pluginQueue, ^{
-                                                                           
-                                                                           NSUInteger width = IOSurfaceGetWidth(frameSurface);
-                                                                           NSUInteger height = IOSurfaceGetHeight(frameSurface);
-                                                                           
-                                                                           GLuint newTextureForSurface;
-                                                                           
-                                                                           glPushAttrib(GL_TEXTURE_BIT);
-                                                                           
-                                                                           glGenTextures(1, &newTextureForSurface);
-                                                                           glBindTexture(GL_TEXTURE_RECTANGLE_EXT,newTextureForSurface);
-                                                                           
-                                                                           CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_EXT, GL_RGBA, width, height, GL_BGRA, GL_UNSIGNED_BYTE, frameSurface, 0);
-                                                                           
-                                                                           glPopAttrib();
-                                                                           
-                                                                           
-                                                                           // make a new
-                                                                           id<QCPlugInOutputImageProvider> provider = nil;
-                                                                           CGColorSpaceRef cspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-                                                                           provider = [context outputImageProviderFromTextureWithPixelFormat:QCPlugInPixelFormatBGRA8
-                                                                                                                                  pixelsWide:width
-                                                                                                                                  pixelsHigh:height
-                                                                                                                                        name:newTextureForSurface
-                                                                                                                                     flipped:YES
-                                                                                                                             releaseCallback:MyTextureRelease
-                                                                                                                              releaseContext:frameSurface
-                                                                                                                                  colorSpace:cspace
-                                                                                                                            shouldColorMatch:YES];
-                                                                           
-                                                                           CGColorSpaceRelease(cspace);
-                                                                           
-                                                                           // set immediately on the plugins queue.
-                                                                           self.displayImageProvider = provider;
-                                                                           
-                                                                       });
+                                                                       // -emitNewFrame: retains the frame
+                                                                       [self emitNewFrame:frameSurface];
                                                                    }
                                                                });
         
@@ -220,7 +202,39 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
         
     }
     
-    self.outputImage = self.displayImageProvider;
+    IOSurfaceRef frameSurface = [self copyNewFrame];
+    if (frameSurface)
+    {
+        size_t width = IOSurfaceGetWidth(frameSurface);
+        size_t height = IOSurfaceGetHeight(frameSurface);
+        
+        GLuint newTextureForSurface;
+        
+        glPushAttrib(GL_TEXTURE_BIT);
+        
+        glGenTextures(1, &newTextureForSurface);
+        glBindTexture(GL_TEXTURE_RECTANGLE_EXT,newTextureForSurface);
+        
+        CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_EXT, GL_RGBA, (GLsizei)width, (GLsizei)height, GL_BGRA, GL_UNSIGNED_BYTE, frameSurface, 0);
+        
+        glPopAttrib();
+        
+        // emit a new frame
+        CGColorSpaceRef cspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+        id<QCPlugInOutputImageProvider> provider = [context outputImageProviderFromTextureWithPixelFormat:QCPlugInPixelFormatBGRA8
+                                                               pixelsWide:width
+                                                               pixelsHigh:height
+                                                                     name:newTextureForSurface
+                                                                  flipped:YES
+                                                          releaseCallback:MyTextureRelease
+                                                           releaseContext:frameSurface
+                                                               colorSpace:cspace
+                                                         shouldColorMatch:YES];
+        
+        CGColorSpaceRelease(cspace);
+
+        self.outputImage = provider;
+    }
     
     return YES;
 }
