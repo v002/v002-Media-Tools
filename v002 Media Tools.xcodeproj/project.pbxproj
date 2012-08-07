@@ -17,13 +17,11 @@
 		1B3410DE15B3AD9C0035CA52 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 1B3410D315B3AD9C0035CA52 /* icon.icns */; };
 		1B3410DF15B3AD9C0035CA52 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1B3410D415B3AD9C0035CA52 /* README.md */; };
 		1B3410E015B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3410D615B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.m */; };
-		1B3410E115B3AD9C0035CA52 /* v002FBO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3410D815B3AD9C0035CA52 /* v002FBO.m */; };
-		1B3410E215B3AD9C0035CA52 /* v002MasterPluginInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3410DA15B3AD9C0035CA52 /* v002MasterPluginInterface.m */; };
-		1B3410E315B3AD9C0035CA52 /* v002Shader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B3410DC15B3AD9C0035CA52 /* v002Shader.m */; };
 		1B3410F215B3CDEB0035CA52 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410F115B3CDEB0035CA52 /* CoreMedia.framework */; };
 		1B3410F415B3CDF00035CA52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B3410F315B3CDF00035CA52 /* Accelerate.framework */; };
 		1B51A9FA15B496FB0078C076 /* v002_Screen_CapturePlugIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B51A9F915B496FB0078C076 /* v002_Screen_CapturePlugIn.m */; };
 		1B51A9FD15B4A9B50078C076 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B51A9FC15B4A9B50078C076 /* IOSurface.framework */; };
+		E2106F4E15D1CEFA00B8AC60 /* v002IOSurfaceImageProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = E2106F4D15D1CEFA00B8AC60 /* v002IOSurfaceImageProvider.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,18 +43,14 @@
 		1B3410D415B3AD9C0035CA52 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		1B3410D515B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002CVPixelBufferImageProvider.h; sourceTree = "<group>"; };
 		1B3410D615B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002CVPixelBufferImageProvider.m; sourceTree = "<group>"; };
-		1B3410D715B3AD9C0035CA52 /* v002FBO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002FBO.h; sourceTree = "<group>"; };
-		1B3410D815B3AD9C0035CA52 /* v002FBO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002FBO.m; sourceTree = "<group>"; };
-		1B3410D915B3AD9C0035CA52 /* v002MasterPluginInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002MasterPluginInterface.h; sourceTree = "<group>"; };
-		1B3410DA15B3AD9C0035CA52 /* v002MasterPluginInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002MasterPluginInterface.m; sourceTree = "<group>"; };
-		1B3410DB15B3AD9C0035CA52 /* v002Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002Shader.h; sourceTree = "<group>"; };
-		1B3410DC15B3AD9C0035CA52 /* v002Shader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002Shader.m; sourceTree = "<group>"; };
 		1B3410DD15B3AD9C0035CA52 /* v002UniqueClassNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002UniqueClassNames.h; sourceTree = "<group>"; };
 		1B3410F115B3CDEB0035CA52 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		1B3410F315B3CDF00035CA52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		1B51A9F815B496FB0078C076 /* v002_Screen_CapturePlugIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002_Screen_CapturePlugIn.h; sourceTree = "<group>"; };
 		1B51A9F915B496FB0078C076 /* v002_Screen_CapturePlugIn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002_Screen_CapturePlugIn.m; sourceTree = "<group>"; };
 		1B51A9FC15B4A9B50078C076 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		E2106F4C15D1CEFA00B8AC60 /* v002IOSurfaceImageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v002IOSurfaceImageProvider.h; sourceTree = "<group>"; };
+		E2106F4D15D1CEFA00B8AC60 /* v002IOSurfaceImageProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v002IOSurfaceImageProvider.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,12 +145,8 @@
 				1B3410D415B3AD9C0035CA52 /* README.md */,
 				1B3410D515B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.h */,
 				1B3410D615B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.m */,
-				1B3410D715B3AD9C0035CA52 /* v002FBO.h */,
-				1B3410D815B3AD9C0035CA52 /* v002FBO.m */,
-				1B3410D915B3AD9C0035CA52 /* v002MasterPluginInterface.h */,
-				1B3410DA15B3AD9C0035CA52 /* v002MasterPluginInterface.m */,
-				1B3410DB15B3AD9C0035CA52 /* v002Shader.h */,
-				1B3410DC15B3AD9C0035CA52 /* v002Shader.m */,
+				E2106F4C15D1CEFA00B8AC60 /* v002IOSurfaceImageProvider.h */,
+				E2106F4D15D1CEFA00B8AC60 /* v002IOSurfaceImageProvider.m */,
 				1B3410DD15B3AD9C0035CA52 /* v002UniqueClassNames.h */,
 			);
 			path = "v002 Utilities";
@@ -245,10 +235,8 @@
 			files = (
 				1B3410BF15B38BB10035CA52 /* v002_Movie_PlayerPlugIn.m in Sources */,
 				1B3410E015B3AD9C0035CA52 /* v002CVPixelBufferImageProvider.m in Sources */,
-				1B3410E115B3AD9C0035CA52 /* v002FBO.m in Sources */,
-				1B3410E215B3AD9C0035CA52 /* v002MasterPluginInterface.m in Sources */,
-				1B3410E315B3AD9C0035CA52 /* v002Shader.m in Sources */,
 				1B51A9FA15B496FB0078C076 /* v002_Screen_CapturePlugIn.m in Sources */,
+				E2106F4E15D1CEFA00B8AC60 /* v002IOSurfaceImageProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
