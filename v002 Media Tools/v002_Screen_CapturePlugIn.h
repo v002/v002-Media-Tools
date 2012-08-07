@@ -12,11 +12,8 @@
 {
     CGDisplayStreamRef  displayStream;
     dispatch_queue_t displayQueue;
-    id <QCPlugInOutputImageProvider> displayImageProvider;
-    
+    IOSurfaceRef updatedSurface;
 }
-@property (strong) id <QCPlugInOutputImageProvider> displayImageProvider;
-
 // Ports
 @property (assign) NSUInteger inputDisplayID;
 @property (assign) BOOL inputShowCursor;

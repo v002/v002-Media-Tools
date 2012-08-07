@@ -8,7 +8,6 @@
 
 #import <OpenGL/CGLMacro.h>
 
-//#import "v002CVPixelBufferImageProvider.h"
 #import "v002_Screen_CapturePlugIn.h"
 
 #define	kQCPlugIn_Name				@"v002 Screen Capture 2.0"
@@ -23,10 +22,11 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
     CFRelease(frameSurface);
 }
 
-
+@interface v002_Screen_CapturePlugIn (Private)
+- (IOSurfaceRef)copyNewFrame;
+- (void)emitNewFrame:(IOSurfaceRef)frame;
+@end
 @implementation v002_Screen_CapturePlugIn
-
-@synthesize displayImageProvider;
 
 // ports
 @dynamic inputDisplayID;
@@ -59,32 +59,32 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
     
     if([key isEqualToString:@"inputOriginX"])
         return  @{QCPortAttributeNameKey : @"X Origin",
-		QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
-		QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:0]};
-	
+                QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
+                QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:0]};
+
     if([key isEqualToString:@"inputOriginY"])
         return  @{QCPortAttributeNameKey : @"Y Origin",
         QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
         QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:0]};
-	
+
     if([key isEqualToString:@"inputWidth"])
         return  @{QCPortAttributeNameKey : @"Width",
         QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
         QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:mainDisplayRect.size.width]};
-	
+
     if([key isEqualToString:@"inputHeight"])
         return  @{QCPortAttributeNameKey : @"Height",
         QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
         QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:mainDisplayRect.size.height]};
-	
-	
+
+      
 	return nil;
 }
 
 + (NSArray*) sortedPropertyPortKeys
 {
 	return @[@"inputPath",
-	@"outputMovieDidEnd"];
+             @"outputMovieDidEnd"];
 }
 
 + (QCPlugInExecutionMode)executionMode
@@ -102,22 +102,47 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
 	self = [super init];
 	if (self)
     {
-        displayStream = NULL;
-        
         displayQueue = dispatch_queue_create("info.v002.v002ScreenCaptureQueue", DISPATCH_QUEUE_SERIAL);
-        
     }
 	
 	return self;
 }
 
+- (void)finalize
+{
+    dispatch_release(displayQueue);
+    if (displayStream) CFRelease(displayStream);
+    [super finalize];
+}
+
 - (void) dealloc
 {
-    
-    
+    dispatch_release(displayQueue);
+    if (displayStream) CFRelease(displayStream);
     [super dealloc];
 }
 
+- (IOSurfaceRef)getAndSetFrame:(IOSurfaceRef)new
+{
+    bool success = false;
+    IOSurfaceRef old;
+    do {
+        old = updatedSurface;
+        success = OSAtomicCompareAndSwapPtrBarrier(old, new, (void * volatile *)&updatedSurface);
+    } while (!success);
+    return old;
+}
+
+- (IOSurfaceRef)copyNewFrame
+{
+    return [self getAndSetFrame:NULL];
+}
+
+- (void)emitNewFrame:(IOSurfaceRef)frame
+{
+    CFRetain(frame);
+    [self getAndSetFrame:frame];
+}
 
 @end
 
@@ -137,101 +162,81 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
 
 - (BOOL)execute:(id <QCPlugInContext>)context atTime:(NSTimeInterval)time withArguments:(NSDictionary *)arguments
 {
-	@try {
-		
-		CGLContextObj cgl_ctx = [context CGLContextObj];
-		
-		// Get the current queue we are on.
-		dispatch_queue_t pluginQueue = dispatch_get_current_queue();
-		
-		if([self didValueForInputKeyChange:@"inputDisplayID"])
-		{
-			NSLog(@"new Display ID");
-			
-			// Cleanup existing CGDisplayStream;
-			
-			if(displayStream)
-			{
-				CFRelease(displayStream);
-				displayStream = NULL;
-			}
-			
-			// create a new CGDisplayStream
-			CGDirectDisplayID display = (CGDirectDisplayID) self.inputDisplayID;
-			
-			CGRect bounds = CGDisplayBounds(display);
-			
-			displayStream = CGDisplayStreamCreateWithDispatchQueue(display, bounds.size.width, bounds.size.height, 'BGRA', nil, displayQueue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef){
-				@try {
-					if(frameSurface)
-					{
-						// As per CGDisplayStreams header
-						CFRetain(frameSurface);
-						IOSurfaceIncrementUseCount(frameSurface);
-						
-						// use the plugins Queue so our GL context is in the correct spot
-						dispatch_sync(pluginQueue, ^{
-							@try {
-								
-								GLsizei width = (GLsizei)IOSurfaceGetWidth(frameSurface);
-								GLsizei height = (GLsizei)IOSurfaceGetHeight(frameSurface);
-								
-								GLuint newTextureForSurface;
-								
-								glPushAttrib(GL_TEXTURE_BIT);
-								
-								glGenTextures(1, &newTextureForSurface);
-								glBindTexture(GL_TEXTURE_RECTANGLE_EXT,newTextureForSurface);
-								
-								CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_EXT, GL_RGBA, width, height, GL_BGRA, GL_UNSIGNED_BYTE, frameSurface, 0);
-								
-								glPopAttrib();
-								
-								if(newTextureForSurface)
-								{
-									// make a new
-									id<QCPlugInOutputImageProvider> provider = nil;
-									CGColorSpaceRef cspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-									provider = [context outputImageProviderFromTextureWithPixelFormat:QCPlugInPixelFormatBGRA8
-																						   pixelsWide:width
-																						   pixelsHigh:height
-																								 name:newTextureForSurface
-																							  flipped:YES
-																					  releaseCallback:MyTextureRelease
-																					   releaseContext:frameSurface
-																						   colorSpace:cspace
-																					 shouldColorMatch:YES];
-									
-									CGColorSpaceRelease(cspace);
-									
-									// set immediately on the plugins queue.
-									self.displayImageProvider = provider;
-								}
-								
-							}
-							@catch (NSException *exception) {
-								NSLog(@"Exception updating display stream image provider: %@", exception);
-							}
-						});
-					}
-				}
-				@catch (NSException *exception) {
-					NSLog(@"Exception on display stream update: %@", exception);
-				}
-			});
-			
-			CGDisplayStreamStart(displayStream);
-			
-		}
-		
-		self.outputImage = self.displayImageProvider;
-		
-		return YES;
-	}
-	@catch (NSException *exception) {
-		NSLog(@"Exception executing screen capture: %@", exception);
-		return NO;
-	}
+    CGLContextObj cgl_ctx = [context CGLContextObj];
+        
+    if([self didValueForInputKeyChange:@"inputDisplayID"])
+    {
+        NSLog(@"new Display ID");
+        
+        // Cleanup existing CGDisplayStream;
+        
+        if(displayStream)
+        {
+            CFRelease(displayStream);
+            displayStream = NULL;
+        }
+        
+        // create a new CGDisplayStream
+        CGDirectDisplayID display = (CGDirectDisplayID) self.inputDisplayID;
+        
+        CGRect bounds = CGDisplayBounds(display);
+        
+        displayStream = CGDisplayStreamCreateWithDispatchQueue(display,
+                                                               bounds.size.width,
+                                                               bounds.size.height,
+                                                               'BGRA',
+                                                               nil,
+                                                               displayQueue,
+                                                               ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef)
+                                                               {
+                                                                   if(status == kCGDisplayStreamFrameStatusFrameComplete && frameSurface)
+                                                                   {
+                                                                       // As per CGDisplayStreams header
+                                                                       IOSurfaceIncrementUseCount(frameSurface);
+                                                                       // -emitNewFrame: retains the frame
+                                                                       [self emitNewFrame:frameSurface];
+                                                                   }
+                                                               });
+        
+        CGDisplayStreamStart(displayStream);
+        
+    }
+    
+    IOSurfaceRef frameSurface = [self copyNewFrame];
+    if (frameSurface)
+    {
+        size_t width = IOSurfaceGetWidth(frameSurface);
+        size_t height = IOSurfaceGetHeight(frameSurface);
+        
+        GLuint newTextureForSurface;
+        
+        glPushAttrib(GL_TEXTURE_BIT);
+        
+        glGenTextures(1, &newTextureForSurface);
+        glBindTexture(GL_TEXTURE_RECTANGLE_EXT,newTextureForSurface);
+        
+        CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_EXT, GL_RGBA, (GLsizei)width, (GLsizei)height, GL_BGRA, GL_UNSIGNED_BYTE, frameSurface, 0);
+        
+        glPopAttrib();
+        
+        // emit a new frame
+        CGColorSpaceRef cspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+        id<QCPlugInOutputImageProvider> provider = [context outputImageProviderFromTextureWithPixelFormat:QCPlugInPixelFormatBGRA8
+                                                               pixelsWide:width
+                                                               pixelsHigh:height
+                                                                     name:newTextureForSurface
+                                                                  flipped:YES
+                                                          releaseCallback:MyTextureRelease
+                                                           releaseContext:frameSurface
+                                                               colorSpace:cspace
+                                                         shouldColorMatch:YES];
+        
+        CGColorSpaceRelease(cspace);
+
+        self.outputImage = provider;
+    }
+    
+    return YES;
 }
 
 - (void)disableExecution:(id <QCPlugInContext>)context
