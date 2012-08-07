@@ -8,7 +8,6 @@
 
 #import <OpenGL/CGLMacro.h>
 
-//#import "v002CVPixelBufferImageProvider.h"
 #import "v002_Screen_CapturePlugIn.h"
 
 #define	kQCPlugIn_Name				@"v002 Screen Capture 2.0"
@@ -102,19 +101,23 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
 	self = [super init];
 	if (self)
     {
-        displayStream = NULL;
-        
         displayQueue = dispatch_queue_create("info.v002.v002ScreenCaptureQueue", DISPATCH_QUEUE_SERIAL);
-        
     }
 	
 	return self;
 }
 
+- (void)finalize
+{
+    dispatch_release(displayQueue);
+    if (displayStream) CFRelease(displayStream);
+    [super finalize];
+}
+
 - (void) dealloc
 {
-    
-    
+    dispatch_release(displayQueue);
+    if (displayStream) CFRelease(displayStream);
     [super dealloc];
 }
 
