@@ -169,11 +169,16 @@
         // create a new CGDisplayStream
         CGDirectDisplayID display = (CGDirectDisplayID) self.inputDisplayID;
         
-        CGRect bounds = CGDisplayBounds(display);
+        CGDisplayModeRef mode = CGDisplayCopyDisplayMode(display);
+        
+        size_t pixelWidth = CGDisplayModeGetPixelWidth(mode);
+        size_t pixelHeight = CGDisplayModeGetPixelHeight(mode);
+        
+        CGDisplayModeRelease(mode);
         
         displayStream = CGDisplayStreamCreateWithDispatchQueue(display,
-                                                               bounds.size.width,
-                                                               bounds.size.height,
+                                                               pixelWidth,
+                                                               pixelHeight,
                                                                'BGRA',
                                                                nil,
                                                                displayQueue,
