@@ -178,9 +178,20 @@ static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
         
         // create a new CGDisplayStream
         CGDirectDisplayID display = (CGDirectDisplayID) self.inputDisplayID;
-        
+		
+		// Get the backingScaleFactor, from the corresponding NSScreen object
+		CGFloat backingScaleFactor = 1.0;
+		for(NSScreen *screen in [NSScreen screens])
+		{
+			if([screen.deviceDescription[@"NSScreenNumber"] integerValue] == display)
+				backingScaleFactor = screen.backingScaleFactor;
+		}
+		
+		// Get bounds, and account for backingScaleFactor
         CGRect bounds = CGDisplayBounds(display);
-        
+		bounds.size.width *= backingScaleFactor;
+		bounds.size.height *= backingScaleFactor;
+		
         displayStream = CGDisplayStreamCreateWithDispatchQueue(display,
                                                                bounds.size.width,
                                                                bounds.size.height,
