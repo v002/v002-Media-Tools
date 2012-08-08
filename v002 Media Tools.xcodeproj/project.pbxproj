@@ -291,6 +291,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -312,6 +313,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
@@ -326,6 +328,7 @@
 				INFOPLIST_FILE = "v002 Media Tools/v002 Media Tools-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Graphics/Quartz Composer Plug-Ins";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = plugin;
 			};
 			name = Debug;
@@ -341,6 +344,7 @@
 				INFOPLIST_FILE = "v002 Media Tools/v002 Media Tools-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Graphics/Quartz Composer Plug-Ins";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = plugin;
 			};
 			name = Release;
