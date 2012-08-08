@@ -14,15 +14,6 @@
 #define	kQCPlugIn_Name				@"v002 Screen Capture 2.0"
 #define	kQCPlugIn_Description		@"10.8 Only Screen Capture, based off of CGDisplayStream"
 
-static  void MyTextureRelease(CGLContextObj cgl_ctx, GLuint name, void* context)
-{
-    glDeleteTextures(1, &name);
-    
-    IOSurfaceRef frameSurface = (IOSurfaceRef) context;
-    IOSurfaceDecrementUseCount(frameSurface);
-    CFRelease(frameSurface);
-}
-
 @interface v002_Screen_CapturePlugIn (Private)
 - (IOSurfaceRef)copyNewFrame;
 - (void)emitNewFrame:(IOSurfaceRef)frame;
