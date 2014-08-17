@@ -56,7 +56,7 @@
         return  @{QCPortAttributeNameKey:@"Rate", QCPortAttributeDefaultValueKey:[NSNumber numberWithFloat:1.0]};
     
     if([key isEqualToString:@"inputLoopMode"])
-        return  @{QCPortAttributeNameKey : @"Playhead",
+		return  @{QCPortAttributeNameKey : @"Loop Mode",
                 QCPortAttributeMenuItemsKey : @[@"Loop", @"Palindrome", @"No Loop"],
                 QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
                 QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:0],
@@ -260,13 +260,35 @@
     // output port values
     BOOL end = self.movieDidEnd;
     
-    if(end)
-    {
-        self.outputMovieDidEnd = YES;
-        self.movieDidEnd = NO;
-    }
+	if(end)
+	{
+		self.outputMovieDidEnd = YES;
+		self.movieDidEnd = NO;
+		
+		// QCPortAttributeMenuItemsKey : @[@"Loop", @"Palindrome", @"No Loop"],
+		if (self.inputLoopMode == 0)
+		{
+			[[player currentItem] seekToTime:kCMTimeZero];
+			[player setRate:self.inputRate];
+		}
+		else if (self.inputLoopMode == 1)
+		{
+			// Rate is already zero by the time we get here.
+			// Don't rely on reversePlaybackEndTime comparison
+			if (CMTimeCompare([player currentTime], kCMTimeZero) > 0)
+			{
+			    [player setRate: -1.0 * fabs(self.inputRate)];
+			}
+			else
+			{
+			    [player setRate: fabs(self.inputRate)];
+			}
+		}
+	}
     else
-        self.outputMovieDidEnd = NO;
+    {
+		self.outputMovieDidEnd = NO;
+    }
     
 	return YES;
 }
