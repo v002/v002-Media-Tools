@@ -100,13 +100,6 @@
 	return self;
 }
 
-- (void)finalize
-{
-    dispatch_release(displayQueue);
-    if (displayStream) CFRelease(displayStream);
-    [super finalize];
-}
-
 - (void) dealloc
 {
     dispatch_release(displayQueue);

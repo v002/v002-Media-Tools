@@ -179,7 +179,7 @@
 		1B3410A015B38BB10035CA52 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = v002;
 			};
 			buildConfigurationList = 1B3410A315B38BB10035CA52 /* Build configuration list for PBXProject "v002 Media Tools" */;
@@ -308,7 +308,6 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				GCC_ENABLE_OBJC_GC = supported;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "v002 Media Tools/v002 Media Tools-Prefix.pch";
 				INFOPLIST_FILE = "v002 Media Tools/v002 Media Tools-Info.plist";
@@ -323,7 +322,6 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				GCC_ENABLE_OBJC_GC = supported;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "v002 Media Tools/v002 Media Tools-Prefix.pch";
 				INFOPLIST_FILE = "v002 Media Tools/v002 Media Tools-Info.plist";
