@@ -17,6 +17,7 @@
 @interface v002_Screen_CapturePlugIn (Private)
 - (IOSurfaceRef)copyNewFrame;
 - (void)emitNewFrame:(IOSurfaceRef)frame;
+
 @end
 @implementation v002_Screen_CapturePlugIn
 
@@ -95,6 +96,7 @@
 	if (self)
     {
         displayQueue = dispatch_queue_create("info.v002.v002ScreenCaptureQueue", DISPATCH_QUEUE_SERIAL);
+        colorspaceForDisplayID = NULL;
     }
 	
 	return self;
@@ -104,6 +106,10 @@
 {
     dispatch_release(displayQueue);
     if (displayStream) CFRelease(displayStream);
+    
+    if(colorspaceForDisplayID)
+        CGColorSpaceRelease(colorspaceForDisplayID);
+    
     [super dealloc];
 }
 
@@ -162,6 +168,26 @@
         // create a new CGDisplayStream
         CGDirectDisplayID display = (CGDirectDisplayID) self.inputDisplayID;
         
+        // get the Colorspace from the displayID
+        for(NSScreen* screen in [NSScreen screens])
+        {
+            NSDictionary* screenDictionary = [screen deviceDescription];
+            NSNumber* screenID = [screenDictionary objectForKey:@"NSScreenNumber"];
+            CGDirectDisplayID screenDisplayID = [screenID unsignedIntValue];
+
+            if(display == screenDisplayID)
+            {
+                if(colorspaceForDisplayID)
+                {
+                    CGColorSpaceRelease(colorspaceForDisplayID);
+                    colorspaceForDisplayID = NULL;
+                }
+                colorspaceForDisplayID = CGColorSpaceRetain([screen colorSpace].CGColorSpace);
+                
+                break;
+            }
+        }
+        
         CGDisplayModeRef mode = CGDisplayCopyDisplayMode(display);
         
         size_t pixelWidth = CGDisplayModeGetPixelWidth(mode);
@@ -187,22 +213,17 @@
                                                                });
         
         CGDisplayStreamStart(displayStream);
-        
     }
     
     IOSurfaceRef frameSurface = [self copyNewFrame];
     if (frameSurface)
     {
-        CGColorSpaceRef cspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-        
-        v002IOSurfaceImageProvider *output = [[v002IOSurfaceImageProvider alloc] initWithSurface:frameSurface isFlipped:YES colorSpace:cspace shouldColorMatch:YES];
+        v002IOSurfaceImageProvider *output = [[v002IOSurfaceImageProvider alloc] initWithSurface:frameSurface isFlipped:YES colorSpace:colorspaceForDisplayID shouldColorMatch:YES];
         
         // v002IOSurfaceImageProvider has retained the surface and marked it as in use, so we can unmark it and release it now
         CFRelease(frameSurface);
         IOSurfaceDecrementUseCount(frameSurface);
         
-        CGColorSpaceRelease(cspace);
-
         self.outputImage = output;
         
         [output release];
