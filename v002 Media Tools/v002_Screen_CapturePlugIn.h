@@ -13,6 +13,7 @@
     CGDisplayStreamRef  displayStream;
     dispatch_queue_t displayQueue;
     IOSurfaceRef updatedSurface;
+    CGColorSpaceRef colorspaceForDisplayID;
 }
 // Ports
 @property (assign) NSUInteger inputDisplayID;
