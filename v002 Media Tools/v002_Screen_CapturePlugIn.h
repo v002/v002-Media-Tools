@@ -18,11 +18,15 @@
 // Ports
 @property (assign) NSUInteger inputDisplayID;
 @property (assign) BOOL inputShowCursor;
-@property (assign) double inputOriginX;
-@property (assign) double inputOriginY;
-@property (assign) double inputWidth;
-@property (assign) double inputHeight;
+@property (assign) BOOL inputRetina;
+//@property (assign) double inputOriginX;
+//@property (assign) double inputOriginY;
+//@property (assign) double inputWidth;
+//@property (assign) double inputHeight;
 
 @property (assign) id<QCPlugInOutputImageProvider> outputImage;
 //@property (assign)
+
++ (NSString*)productNameForScreen:(NSScreen*)screen;
+
 @end

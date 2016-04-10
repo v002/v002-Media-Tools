@@ -7,7 +7,7 @@
 //
 
 #import <OpenGL/CGLMacro.h>
-
+#import <IOKit/graphics/IOGraphicsLib.h>
 #import "v002_Screen_CapturePlugIn.h"
 #import "v002IOSurfaceImageProvider.h"
 
@@ -24,10 +24,11 @@
 // ports
 @dynamic inputDisplayID;
 @dynamic inputShowCursor;
-@dynamic inputOriginX;
-@dynamic inputOriginY;
-@dynamic inputWidth;
-@dynamic inputHeight;
+@dynamic inputRetina;
+//@dynamic inputOriginX;
+//@dynamic inputOriginY;
+//@dynamic inputWidth;
+//@dynamic inputHeight;
 
 @dynamic outputImage;
 
@@ -39,36 +40,57 @@
 
 + (NSDictionary *)attributesForPropertyPortWithKey:(NSString *)key
 {
-    CGDirectDisplayID mainDisplay = CGMainDisplayID();
-    CGRect mainDisplayRect = CGDisplayBounds(mainDisplay);
+//    CGDirectDisplayID mainDisplay = CGMainDisplayID();
+//    CGRect mainDisplayRect = CGDisplayBounds(mainDisplay);
+    
+    NSMutableArray* screens = [NSMutableArray arrayWithCapacity:[NSScreen screens].count];
+    
+    for(NSScreen* screen in [NSScreen screens])
+    {
+        NSLog(@"%@", [screen deviceDescription]);
+        
+        [screens addObject:[[self class] productNameForScreen:screen]];
+    }
     
     
     if([key isEqualToString:@"inputDisplayID"])
-        return  @{QCPortAttributeNameKey : @"Display ID", QCPortAttributeDefaultValueKey:[NSNumber numberWithUnsignedInt:mainDisplay]};
+        return  @{QCPortAttributeNameKey : @"Display",
+                  QCPortAttributeMenuItemsKey : screens,
+                  QCPortAttributeMinimumValueKey : @(0),
+                  QCPortAttributeMaximumValueKey : @(screens.count - 1),
+                  QCPortAttributeDefaultValueKey : @(0),
+                  };
     
     if([key isEqualToString:@"inputShowCursor"])
         return  @{QCPortAttributeNameKey:@"Show Cursor", QCPortAttributeDefaultValueKey:[NSNumber numberWithBool:NO]};
     
+    if([key isEqualToString:@"inputRetina"])
+    {
+        return @{QCPortAttributeNameKey : @"High DPI Capture" , QCPortAttributeDefaultValueKey : @NO};
+    }
     
-    if([key isEqualToString:@"inputOriginX"])
-        return  @{QCPortAttributeNameKey : @"X Origin",
-                QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
-                QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:0]};
+//    if([key isEqualToString:@"inputOriginX"])
+//        return  @{QCPortAttributeNameKey : @"X Origin",
+//                QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
+//                QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:0]};
+//
+//    if([key isEqualToString:@"inputOriginY"])
+//        return  @{QCPortAttributeNameKey : @"Y Origin",
+//        QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
+//        QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:0]};
+//
+//    if([key isEqualToString:@"inputWidth"])
+//        return  @{QCPortAttributeNameKey : @"Width",
+//        QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
+//        QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:mainDisplayRect.size.width]};
+//
+//    if([key isEqualToString:@"inputHeight"])
+//        return  @{QCPortAttributeNameKey : @"Height",
+//        QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
+//        QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:mainDisplayRect.size.height]};
 
-    if([key isEqualToString:@"inputOriginY"])
-        return  @{QCPortAttributeNameKey : @"Y Origin",
-        QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
-        QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:0]};
-
-    if([key isEqualToString:@"inputWidth"])
-        return  @{QCPortAttributeNameKey : @"Width",
-        QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
-        QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:mainDisplayRect.size.width]};
-
-    if([key isEqualToString:@"inputHeight"])
-        return  @{QCPortAttributeNameKey : @"Height",
-        QCPortAttributeMinimumValueKey : [NSNumber numberWithUnsignedInteger:0],
-        QCPortAttributeDefaultValueKey : [NSNumber numberWithUnsignedInteger:mainDisplayRect.size.height]};
+    if([key isEqualToString:@"outputImage"])
+        return  @{QCPortAttributeNameKey : @"Image"};
 
       
 	return nil;
@@ -76,8 +98,10 @@
 
 + (NSArray*) sortedPropertyPortKeys
 {
-	return @[@"inputPath",
-             @"outputMovieDidEnd"];
+	return @[@"inputDisplayID",
+             @"inputShowCursor",
+             @"inputRetina",
+             ];
 }
 
 + (QCPlugInExecutionMode)executionMode
@@ -153,7 +177,7 @@
 
 - (BOOL)execute:(id <QCPlugInContext>)context atTime:(NSTimeInterval)time withArguments:(NSDictionary *)arguments
 {        
-    if([self didValueForInputKeyChange:@"inputDisplayID"])
+    if([self didValueForInputKeyChange:@"inputDisplayID"] || [self didValueForInputKeyChange:@"inputShowCursor"] || [self didValueForInputKeyChange:@"inputRetina"])
     {
         NSLog(@"new Display ID");
         
@@ -166,53 +190,66 @@
         }
         
         // create a new CGDisplayStream
-        CGDirectDisplayID display = (CGDirectDisplayID) self.inputDisplayID;
         
-        // get the Colorspace from the displayID
-        for(NSScreen* screen in [NSScreen screens])
+        // we need to get the display ID from our product name
+        // theoretically, the list of displays hasnt changed.
+        // this is likely a bad assumption but for now we use the index of our product name menu as an index into the NSScreen.
+        NSScreen* screen = [[NSScreen screens] objectAtIndex:self.inputDisplayID];
+        
+        if(screen)
         {
             NSDictionary* screenDictionary = [screen deviceDescription];
             NSNumber* screenID = [screenDictionary objectForKey:@"NSScreenNumber"];
             CGDirectDisplayID screenDisplayID = [screenID unsignedIntValue];
 
-            if(display == screenDisplayID)
+            if(screenDisplayID)
             {
+                // release if we have..
                 if(colorspaceForDisplayID)
                 {
                     CGColorSpaceRelease(colorspaceForDisplayID);
                     colorspaceForDisplayID = NULL;
                 }
                 colorspaceForDisplayID = CGColorSpaceRetain([screen colorSpace].CGColorSpace);
-                
-                break;
             }
+            
+            CGDisplayModeRef mode = CGDisplayCopyDisplayMode(screenDisplayID);
+            
+            size_t pixelWidth = CGDisplayModeGetPixelWidth(mode);
+            size_t pixelHeight = CGDisplayModeGetPixelHeight(mode);
+            
+            if(!self.inputRetina)
+            {
+                pixelWidth /= 2;
+                pixelHeight /= 2;
+            }
+            
+            CGDisplayModeRelease(mode);
+            
+            
+            NSDictionary* options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool: self.inputShowCursor] forKey:(NSString*)kCGDisplayStreamShowCursor];
+            
+            displayStream = CGDisplayStreamCreateWithDispatchQueue(screenDisplayID,
+                                                                   pixelWidth,
+                                                                   pixelHeight,
+                                                                   'BGRA',
+                                                                   (CFDictionaryRef)options,
+                                                                   displayQueue,
+                                                                   ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef)
+                                                                   {
+                                                                       if(status == kCGDisplayStreamFrameStatusFrameComplete && frameSurface)
+                                                                       {
+                                                                           // As per CGDisplayStreams header
+                                                                           IOSurfaceIncrementUseCount(frameSurface);
+                                                                           // -emitNewFrame: retains the frame
+                                                                           [self emitNewFrame:frameSurface];
+                                                                       }
+                                                                   });
+            
+            CGDisplayStreamStart(displayStream);
+
         }
         
-        CGDisplayModeRef mode = CGDisplayCopyDisplayMode(display);
-        
-        size_t pixelWidth = CGDisplayModeGetPixelWidth(mode);
-        size_t pixelHeight = CGDisplayModeGetPixelHeight(mode);
-        
-        CGDisplayModeRelease(mode);
-        
-        displayStream = CGDisplayStreamCreateWithDispatchQueue(display,
-                                                               pixelWidth,
-                                                               pixelHeight,
-                                                               'BGRA',
-                                                               nil,
-                                                               displayQueue,
-                                                               ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef)
-                                                               {
-                                                                   if(status == kCGDisplayStreamFrameStatusFrameComplete && frameSurface)
-                                                                   {
-                                                                       // As per CGDisplayStreams header
-                                                                       IOSurfaceIncrementUseCount(frameSurface);
-                                                                       // -emitNewFrame: retains the frame
-                                                                       [self emitNewFrame:frameSurface];
-                                                                   }
-                                                               });
-        
-        CGDisplayStreamStart(displayStream);
     }
     
     IOSurfaceRef frameSurface = [self copyNewFrame];
@@ -221,8 +258,8 @@
         v002IOSurfaceImageProvider *output = [[v002IOSurfaceImageProvider alloc] initWithSurface:frameSurface isFlipped:YES colorSpace:colorspaceForDisplayID shouldColorMatch:YES];
         
         // v002IOSurfaceImageProvider has retained the surface and marked it as in use, so we can unmark it and release it now
-        CFRelease(frameSurface);
         IOSurfaceDecrementUseCount(frameSurface);
+        CFRelease(frameSurface);
         
         self.outputImage = output;
         
@@ -240,6 +277,89 @@
 {
     if(displayStream)
         CGDisplayStreamStop(displayStream);
+}
+
+
+#pragma mark - Helper Methods
+
+static io_service_t IOServicePortFromCGDisplayID(CGDirectDisplayID displayID)
+{
+    io_iterator_t iter;
+    io_service_t serv, servicePort = 0;
+    
+    CFMutableDictionaryRef matching = IOServiceMatching("IODisplayConnect");
+    
+    // releases matching for us
+    kern_return_t err = IOServiceGetMatchingServices(kIOMasterPortDefault,
+                                                     matching,
+                                                     &iter);
+    if (err)
+    {
+        return 0;
+    }
+    
+    while ((serv = IOIteratorNext(iter)) != 0)
+    {
+        CFDictionaryRef info;
+        CFIndex vendorID, productID;
+        CFNumberRef vendorIDRef, productIDRef;
+        Boolean success;
+        
+        info = IODisplayCreateInfoDictionary(serv,kIODisplayOnlyPreferredName);
+        
+        vendorIDRef = CFDictionaryGetValue(info, CFSTR(kDisplayVendorID));
+        productIDRef = CFDictionaryGetValue(info, CFSTR(kDisplayProductID));
+        
+        success = CFNumberGetValue(vendorIDRef, kCFNumberCFIndexType,
+                                   &vendorID);
+        success &= CFNumberGetValue(productIDRef, kCFNumberCFIndexType,
+                                    &productID);
+        
+        if (!success)
+        {
+            CFRelease(info);
+            continue;
+        }
+        
+        if (CGDisplayVendorNumber(displayID) != vendorID ||
+            CGDisplayModelNumber(displayID) != productID)
+        {
+            CFRelease(info);
+            continue;
+        }
+        
+        // we're a match
+        servicePort = serv;
+        CFRelease(info);
+        break;
+    }
+    
+    IOObjectRelease(iter);
+    return servicePort;
+}
+
++ (NSString*)productNameForScreen:(NSScreen*)screen
+{
+    NSString *screenName = nil;
+    
+    NSNumber* screenNumber = [screen deviceDescription][@"NSScreenNumber"];
+    
+    CGDirectDisplayID displayID = [screenNumber unsignedIntValue];
+    
+    io_service_t displayServicePort = IOServicePortFromCGDisplayID(displayID);
+    NSDictionary *deviceInfo = (NSDictionary *)IODisplayCreateInfoDictionary(displayServicePort, kIODisplayOnlyPreferredName);
+    NSDictionary *localizedNames = [deviceInfo objectForKey:[NSString stringWithUTF8String:kDisplayProductName]];
+    
+    if(displayServicePort)
+        CFRelease(displayServicePort);
+    
+    if ([localizedNames count] > 0)
+    {
+        screenName = [[localizedNames objectForKey:[[localizedNames allKeys] objectAtIndex:0]] retain];
+    }
+    
+    [deviceInfo release];
+    return [screenName autorelease];
 }
 
 
